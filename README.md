@@ -1,5 +1,7 @@
 # vrp-validate
 
+[![Build](https://github.com/mrprajesh/vrp-validate/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/mrprajesh/vrp-validate/actions/workflows/c-cpp.yml)
+
 ### Assumptions
 
 1. We have the input file
