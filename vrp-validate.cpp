@@ -264,8 +264,8 @@ void calDist(const CVRPInOut<T1> &inputs, std::vector< std::vector<T2>> &dist){
 
 template <typename T1, typename T2>
 void computeSavings(const CVRPInOut<T1> &inputs, std::vector< std::vector<T2>> &dist,
-  //! std::set<std::pair<T2, std::pair<T1,T1>> , std::greater<std::pair<T2, std::pair<T1,T1>>>  > &savings
-  auto &savings
+  std::set<std::pair<T2, std::pair<T1,T1>> , std::greater<std::pair<T2, std::pair<T1,T1>>>  > &savings
+  //~ auto &savings
 ){
   T1 size=inputs.n;
   const T1 DEPOT = 0;
