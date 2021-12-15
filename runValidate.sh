@@ -1,6 +1,6 @@
 #!/bin/bash
 INPDIR=inputs
-OUTDIR=out5v5
+OUTDIR=outputs
 EXENAME=vrp-validate
 
 mkdir -p $OUTDIR
