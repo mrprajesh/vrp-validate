@@ -1,7 +1,7 @@
 # vrp-validate
 
 [![Dev Branch](https://github.com/mrprajesh/vrp-validate/actions/workflows/dev.yml/badge.svg?branch=dev)](https://github.com/mrprajesh/vrp-validate/actions/workflows/dev.yml)
-[![Main Branch](https://github.com/mrprajesh/vrp-validate/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/mrprajesh/vrp-validate/actions/workflows/main.yml)
+[![Main Branch](https://github.com/mrprajesh/vrp-validate/actions/workflows/main.yml/badge.svg)](https://github.com/mrprajesh/vrp-validate/actions/workflows/main.yml)
 
 ### Assumptions
 
