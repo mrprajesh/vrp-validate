@@ -1,6 +1,7 @@
 # vrp-validate
 
-[![Build](https://github.com/mrprajesh/vrp-validate/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/mrprajesh/vrp-validate/actions/workflows/c-cpp.yml)
+[![Dev Branch](https://github.com/mrprajesh/vrp-validate/actions/workflows/dev.yml/badge.svg?branch=dev)](https://github.com/mrprajesh/vrp-validate/actions/workflows/dev.yml)
+[![Main Branch](https://github.com/mrprajesh/vrp-validate/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/mrprajesh/vrp-validate/actions/workflows/main.yml)
 
 ### Assumptions
 
@@ -13,3 +14,5 @@
 ```
 cat toy.vrp toy.sol | vrp-validate.out
 ```
+
+
