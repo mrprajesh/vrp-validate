@@ -56,6 +56,7 @@ class CVRPInOut{
 public:
   CVRPInOut(){
     //! routes.reserve(n);
+    isExplicit=false;
   }
   //! CVRPInOut(){}
   ~CVRPInOut(){}
@@ -107,9 +108,12 @@ public:
 
   T n;
   T vCapacity;
-  std::string     dim;
-  std::vector<T>  demand;
 
+  bool isExplicit;
+  std::string     dim;    // type of edgeweight EUC_2D |  EXPLICIT
+  std::vector< std::vector<T>> dist;
+
+  std::vector<T>  demand;
   std::vector<std::pair<T,T>> pts;
   private:
   T curRoute = 0;
@@ -162,8 +166,8 @@ void extractPoints(CVRPInOut<T> &inputs){
     std::istringstream iss(line);
 
     iss >> id >> xStr >> yStr;    // BUG FIX
-    x=stof(xStr);
-    y=stof(yStr);
+    x=(stof(xStr));//also non-rounded at times.
+    y=(stof(yStr));//also non-rounded at times.
     //! std::cout<< id  << " " << x << ","<< y <<" " << '\n';
 
     if(id != ii) {
@@ -188,6 +192,29 @@ void extractDemands(CVRPInOut<T> &inputs){
   }
 }
 
+template<typename T>
+void extractCoordinates(CVRPInOut<T> &inputs){ //, std::ifstream &ifs
+  T id;
+  std::string line;
+
+  // Allocate
+  inputs.dist.resize(inputs.n);
+  for(T ii=0, end=inputs.n; ii < end  ; ++ii)
+    inputs.dist[ii].resize(inputs.n,0);
+
+  //Store
+  for(T ii=1, end=inputs.n; ii < end && std::getline(std::cin, line) ; ++ii){ // NOTE START FROM 1  and NOT  0
+    std::istringstream iss(line);
+    for(T jj=0; jj < end ; ++jj){
+      if(ii > jj){ // shouuld run only  ( (n-1) * n ) /2 times i.e only vales below diagonal in nxn matrix
+        iss >> id;
+        //~ std::cout<< ii<<":" << id << '\n';
+        inputs.dist[ii][jj]=id;
+        inputs.dist[jj][ii]=id;
+      }
+    }
+  }
+}
 
 template<typename T>
 void readVRP(CVRPInOut<T> &inputs){
@@ -209,12 +236,20 @@ void readVRP(CVRPInOut<T> &inputs){
         inputs.setCapacity(val);
       }else if (code == "EDGE_WEIGHT_TYPE"){
         extract<std::string>(line, inputs.dim); //store 2 or 2D; let's have as str
+        if(inputs.dim=="EXPLICIT")
+          inputs.isExplicit=true;
+      }else if (code == "EDGE_WEIGHT_FORMAT" || code == "NODE_COORD_TYPE"){
+        extract<std::string>(line, dummy);
+        //~ EDGE_WEIGHT_FORMAT : LOWER_ROW  // Just ignoring it
+        //~ NODE_COORD_TYPE : TWOD_COORDS
       }else if (code == "NODE_COORD_SECTION"){
         extractPoints<T>(inputs);
       }else if (code == "DEMAND_SECTION"){
         extractDemands<T>(inputs);
       }else if (code == "DEPOT_SECTION"){
         std::cin >> depot >> dummy;
+      }else if (code == "EDGE_WEIGHT_SECTION"){
+        extractCoordinates<T>(inputs);
       }else if (code == "EOF"){
         if(depot != 1 || depot == DEFAULT){
           std::cout<< "WARN: Depot may not be 1" << '\n';
@@ -781,6 +816,8 @@ void readVRPOutput(CVRPInOut<T> &inputs){
     }
   }
 }
+
+
 template<typename T>
 void checkAll(CVRPInOut<T> &inputs){
 
@@ -828,9 +865,16 @@ int main(int argc, char **argv) {
   readVRP<float>(inputs); //input might be float! e.g. 33.000000
 
 
-
   std::vector< std::vector<float>> distance;
-  calDist<float,float>(inputs,     distance);
+  //~ calDist<float,float>(inputs,     distance);
+
+  if(!(inputs.isExplicit))
+    calDist<float,float>(inputs,     distance);
+  else{
+    distance = inputs.dist;
+  }
+
+  DEBUG printDist<float,float>(distance);
 
   readVRPOutput<float>(inputs);   // Read the output file
 
